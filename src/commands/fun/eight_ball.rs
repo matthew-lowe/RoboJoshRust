@@ -11,23 +11,24 @@ use rand::seq::SliceRandom;
 const RESPONSES: &'static [&str] = &["Absolutely", "Not happening", "Unlikely", "Likely", "Focus harder and ask again"];
 
 #[command]
-pub async fn eight_ball(context: &Context, message: &Message, mut args: Args) -> CommandResult {
-    if args.is_empty() {
-        let response = MessageBuilder::new()
+#[aliases("8ball", "eightball", "8_ball")]
+pub async fn eight_ball(context: &Context, message: &Message, args: Args) -> CommandResult {
+    let response = if args.is_empty() {
+        MessageBuilder::new()
             .mention(&message.author)
-            .push(" Ask a question, idiot!")
-            .build();
-        message.channel_id.say(&context.http, response).await?;
-        Ok(())
+            .push(" Ask a question idiot!")
+            .build()
     } else {
-        let response = MessageBuilder::new()
-            .mention(&message.author)
-            .push(" The result is: ")
-            .push_bold_safe(RESPONSES.choose(&mut rand::thread_rng()).unwrap())
-            .build();
-        
-        message.channel_id.say(&context.http, response).await?;
+        let chance = RESPONSES.choose(&mut rand::thread_rng()).unwrap();
 
-        Ok(())
-    }
+        MessageBuilder::new()
+            .mention(&message.author)
+            .push(" The magic 8-ball responds with ")
+            .push_bold_safe(chance)
+            .build()
+    };
+
+    message.channel_id.say(&context.http, response).await?;
+
+    Ok(())
 }
