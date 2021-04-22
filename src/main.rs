@@ -1,16 +1,15 @@
-mod listeners;
-
 use std::{collections::HashSet, env};
 
+mod commands;
+use commands::ping::*;
+
+mod listeners;
 use listeners::{
     handler::Handler,
 };
 
 use serenity::{
-    async_trait,
-    model::{channel::Message, gateway::Ready},
     prelude::*,
-    utils::MessageBuilder,
     framework::{
         StandardFramework,
         standard::macros::group,
@@ -19,6 +18,7 @@ use serenity::{
 };
 
 #[group]
+#[commands(ping)]
 struct General;
 
 #[tokio::main]
