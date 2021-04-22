@@ -1,7 +1,10 @@
 use std::{collections::HashSet, env};
 
 mod commands;
-use commands::test::ping::*;
+use commands::{
+    test::ping::*,
+    fun::eight_ball::*,
+};
 
 mod listeners;
 use listeners::{
@@ -18,13 +21,18 @@ use serenity::{
 };
 
 #[group]
-#[sub_groups(test)]
+#[sub_groups(test, fun)]
 struct General;
 
 #[group]
 #[prefix="test"]
 #[commands(ping)]
 struct Test;
+
+#[group]
+#[prefix="fun"]
+#[commands(eight_ball)]
+struct Fun;
 
 #[tokio::main]
 async fn main() {
